@@ -152,6 +152,22 @@ def FilterColumn():
             FilterColumn.datatemp = data[istrue]
             filtering = False
             print("Error. Filtered as equal to.")
+            
+# Deal with missing data in columns. Shows mean, median and mode in case user doesn't wish for 0.
+def MissingData():
+    print("Which column has missing entries that you would like to replace?")
+    misscol = input("Column: ")
+    columnmean = data[misscol].mean()
+    columnmode = data[misscol].mode()
+    columnmedian = data[misscol].median()
+    print("Data for this column, excluding missing points:")
+    print("Mean:",columnmean)
+    print("Median:",columnmedian)
+    print("Mode:",columnmode)
+    
+    print("What would you like to replace the missing entries with?")    
+    replacewith = input("Replacement:")
+    data[misscol].fillna(replacewith, inplace = True)
 
 # Export dataframe to CSV (#5. Option to save/export changed data) 
 def Export():
@@ -176,7 +192,8 @@ def options():
     print("11. Show the covariance between the columns of integers.")
     print("12. Show the correlation between the columns of integers.")
     print("13. Add column with % of the total of a specified column.")
-    print("14. Filter by a value in a column")
+    print("14. Filter by a value in a column.")
+    print("15. Resolve missing values in columns.")
     print("97. Reload the CSV file.")
     print("98. Export the table to a new CSV file.")
     print("99. Exit the script.")
@@ -241,6 +258,9 @@ while scriptrunning:
     elif UserChoice == 14:
         FilterColumn()
         data = FilterColumn.datatemp
+        options()
+    elif UserChoice == 15:
+        MissingData()
         options()
     elif UserChoice == 97:
         data = pd.read_csv(datafilename)
